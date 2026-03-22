@@ -1,0 +1,24 @@
+{
+  "name": "mb-workspace",
+  "version": "1.0.0",
+  "description": "One-command installer for MB Workspace",
+  "type": "commonjs",
+  "bin": {
+    "mb-workspace": "./bin/mb-workspace.js"
+  },
+  "files": [
+    "bin",
+    "install.sh",
+    "install.ps1",
+    "mb-tools",
+    "README.md",
+    ".gitignore"
+  ],
+  "keywords": [
+    "workspace",
+    "designer",
+    "cli",
+    "installer"
+  ],
+  "license": "MIT"
+}
