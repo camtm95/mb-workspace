@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE="${MB_WORKSPACE_HOME:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+PROJECTS_DIR="$WORKSPACE/projects"
+
+mkdir -p "$PROJECTS_DIR"
+
+echo "=== MB WORKSPACE ==="
+echo "1. Mở project có sẵn"
+echo "2. Clone project mới"
+read -r -p "Chọn (1/2): " choice
+
+if [ "$choice" = "1" ]; then
+  echo "Danh sách project:"
+  ls "$PROJECTS_DIR" 2>/dev/null || true
+
+  read -r -p "Nhập tên project: " project
+
+  if [ -d "$PROJECTS_DIR/$project" ]; then
+    cd "$PROJECTS_DIR/$project" || exit 1
+    echo "Đã vào project: $project"
+    exec "${SHELL:-bash}" -lc 'mb-start; exec "${SHELL:-bash}"'
+  else
+    echo "❌ Project không tồn tại"
+    exit 1
+  fi
+
+elif [ "$choice" = "2" ]; then
+  read -r -p "Nhập git repo URL: " repo
+
+  name=$(basename "$repo" .git)
+
+  git clone "$repo" "$PROJECTS_DIR/$name"
+
+  cd "$PROJECTS_DIR/$name" || exit 1
+  echo "Đã clone và vào project: $name"
+
+  exec "${SHELL:-bash}" -lc 'mb-start; exec "${SHELL:-bash}"'
+else
+  echo "❌ Lựa chọn không hợp lệ"
+  exit 1
+fi

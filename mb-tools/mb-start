@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+BRANCH=$(git branch --show-current)
+
+echo "=== MB START ==="
+echo "Branch hiện tại: $BRANCH"
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "⚠️ Bạn đang có thay đổi chưa commit"
+else
+  echo "✅ Working tree sạch"
+fi

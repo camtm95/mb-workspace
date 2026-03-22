@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+
+TASK=${1:-}
+
+if [ -z "$TASK" ]; then
+  echo "❌ Thiếu tên task"
+  exit 1
+fi
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "⚠️ Bạn có thay đổi chưa commit. Hãy mb-save trước."
+  exit 1
+fi
+
+git fetch
+
+if git show-ref --verify --quiet "refs/heads/$TASK"; then
+  git checkout "$TASK"
+else
+  git checkout -b "$TASK"
+fi
+
+echo "🚀 Đang làm task: $TASK"

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+
+SUBMITTED_FILE="${MB_WORKSPACE_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/.projects/.mb_submitted"
+mkdir -p "$(dirname "$SUBMITTED_FILE")"
+touch "$SUBMITTED_FILE"
+
+CURRENT=$(git branch --show-current)
+
+echo "=== TASK LIST ==="
+
+git branch --format='%(refname:short)' | grep -vE '^(master|main)$' | while IFS= read -r branch; do
+  MARK=""
+  if grep -Fxq "$branch" "$SUBMITTED_FILE"; then
+    MARK="(submitted)"
+  fi
+
+  if [ "$branch" = "$CURRENT" ]; then
+    echo "* $branch $MARK (đang làm)"
+  else
+    echo "  $branch $MARK"
+  fi
+done

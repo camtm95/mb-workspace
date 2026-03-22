@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+
+BRANCH=$(git branch --show-current)
+WORKSPACE="${MB_WORKSPACE_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+SUBMITTED_FILE="$WORKSPACE/.projects/.mb_submitted"
+
+mkdir -p "$(dirname "$SUBMITTED_FILE")"
+touch "$SUBMITTED_FILE"
+
+git push origin "$BRANCH"
+
+grep -Fxq "$BRANCH" "$SUBMITTED_FILE" || echo "$BRANCH" >> "$SUBMITTED_FILE"
+
+echo "🚀 Đã push branch: $BRANCH"
+echo "👉 Tạo Merge Request tại GitLab/GitHub: origin/$BRANCH → master hoặc main"

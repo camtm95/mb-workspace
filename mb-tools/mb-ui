@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE="${MB_WORKSPACE_HOME:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+PROJECTS_DIR="$WORKSPACE/projects"
+SUBMITTED_FILE="$WORKSPACE/.projects/.mb_submitted"
+
+mkdir -p "$PROJECTS_DIR" "$(dirname "$SUBMITTED_FILE")"
+touch "$SUBMITTED_FILE"
+
+GREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+GRAY="\033[0;37m"
+CYAN="\033[1;36m"
+RESET="\033[0m"
+
+echo -e "${CYAN}┌──────────── MB WORKSPACE ────────────┐${RESET}"
+mapfile -t projects < <(find "$PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
+for i in "${!projects[@]}"; do
+    echo -e "│  [${i}] ${projects[$i]}"
+done
+echo -e "│  [C] Clone project mới"
+echo -e "│  [Q] Thoát"
+echo -e "${CYAN}└──────────────────────────────────────┘${RESET}"
+read -r -p "Chọn project hoặc clone: " choice
+
+if [[ "$choice" == "C" || "$choice" == "c" ]]; then
+    read -r -p "Nhập URL repo: " repo
+    name=$(basename "$repo" .git)
+    git clone "$repo" "$PROJECTS_DIR/$name"
+    cd "$PROJECTS_DIR/$name" || exit 1
+    echo "Đã clone và vào project: $name"
+elif [[ "$choice" == "Q" || "$choice" == "q" ]]; then
+    exit 0
+elif [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -lt "${#projects[@]}" ]; then
+    project=${projects[$choice]}
+    cd "$PROJECTS_DIR/$project" || exit 1
+    echo "Đã chọn project: $project"
+else
+    echo "❌ Lựa chọn không hợp lệ"
+    exit 1
+fi
+
+echo -e "\n${CYAN}┌────────── TASK MENU ──────────┐${RESET}"
+CURRENT=$(git branch --show-current)
+mapfile -t branches < <(git branch --format='%(refname:short)' | grep -vE '^(master|main)$')
+
+for i in "${!branches[@]}"; do
+    task=${branches[$i]}
+    status="Pending"
+    if [ "$task" = "$CURRENT" ]; then status="Doing"; fi
+    if grep -Fxq "$task" "$SUBMITTED_FILE"; then status="Submitted"; fi
+
+    color=$GRAY
+    if [ "$status" = "Doing" ]; then color=$GREEN; fi
+    if [ "$status" = "Pending" ]; then color=$YELLOW; fi
+
+    echo -e "│  [${i}] $task (${color}${status}${RESET})"
+done
+echo -e "│  [N] Tạo task mới"
+echo -e "│  [Q] Thoát"
+echo -e "${CYAN}└──────────────────────────────┘${RESET}"
+
+read -r -p "Chọn task: " task_choice
+if [[ "$task_choice" =~ ^[0-9]+$ ]] && [ "$task_choice" -lt "${#branches[@]}" ]; then
+    git checkout "${branches[$task_choice]}"
+    echo "Đang làm task: ${branches[$task_choice]}"
+elif [[ "$task_choice" == "N" || "$task_choice" == "n" ]]; then
+    read -r -p "Nhập tên task mới: " new_task
+    git checkout -b "$new_task"
+    echo "Tạo và chuyển sang task: $new_task"
+elif [[ "$task_choice" == "Q" || "$task_choice" == "q" ]]; then
+    exit 0
+else
+    echo "❌ Lựa chọn không hợp lệ"
+    exit 1
+fi
