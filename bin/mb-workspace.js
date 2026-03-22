@@ -26,11 +26,11 @@ if (isWindows) {
     '-ExecutionPolicy',
     'Bypass',
     '-Command',
-    'irm https://raw.githubusercontent.com/<YOUR_USER>/<YOUR_REPO>/main/install.ps1 | iex'
+    'irm https://raw.githubusercontent.com/camtm95/mb-workspace/main/install.ps1 | iex'
   ]);
 } else {
   run('bash', [
     '-lc',
-    'curl -fsSL https://raw.githubusercontent.com/<YOUR_USER>/<YOUR_REPO>/main/install.sh | bash'
+    'curl -fsSL https://raw.githubusercontent.com/camtm95/mb-workspace/main/install.sh | bash'
   ]);
 }

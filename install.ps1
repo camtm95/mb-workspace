@@ -1,4 +1,4 @@
-$RepoUrl = "https://github.com/<YOUR_USER>/<YOUR_REPO>.git"
+$RepoUrl = "https://github.com/camtm95/mb-workspace.git"
 $InstallDir = if ($env:MB_WORKSPACE_HOME) { $env:MB_WORKSPACE_HOME } else { "$env:USERPROFILE\.mb-workspace" }
 $BinDir = "$InstallDir\mb-tools"
 

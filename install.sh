@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="https://github.com/<YOUR_USER>/<YOUR_REPO>.git"
+REPO_URL="https://github.com/camtm95/mb-workspace.git"
 INSTALL_DIR="${MB_WORKSPACE_HOME:-$HOME/.mb-workspace}"
 BIN_DIR="$INSTALL_DIR/mb-tools"
 
