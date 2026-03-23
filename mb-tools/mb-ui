@@ -87,11 +87,14 @@ else
 fi
 
 # Mở IDE nếu có trên chính cửa sổ hiện tại (dùng cờ -r để reuse-window)
-if command -v code &> /dev/null; then
-    echo "Hiện thị thư mục trên cửa sổ hiện tại..."
+if command -v antigravity &> /dev/null; then
+    echo "Hiển thị thư mục trên Antigravity IDE..."
+    antigravity -r .
+elif command -v code &> /dev/null; then
+    echo "Hiển thị thư mục trên cửa sổ hiện tại..."
     code -r .
 elif command -v cursor &> /dev/null; then
-    echo "Hiện thị thư mục trên cửa sổ hiện tại..."
+    echo "Hiển thị thư mục trên cửa sổ hiện tại..."
     cursor -r .
 fi
 
