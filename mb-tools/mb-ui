@@ -86,6 +86,15 @@ else
     exit 1
 fi
 
+# Mở IDE nếu có trên chính cửa sổ hiện tại (dùng cờ -r để reuse-window)
+if command -v code &> /dev/null; then
+    echo "Hiện thị thư mục trên cửa sổ hiện tại..."
+    code -r .
+elif command -v cursor &> /dev/null; then
+    echo "Hiện thị thư mục trên cửa sổ hiện tại..."
+    cursor -r .
+fi
+
 # Cuối cùng, mở một shell mới trong thư mục đã chọn để "giữ" người dùng ở đó
 echo -e "\n${GREEN}🚀 Đã sẵn sàng tại: $(pwd)${RESET}"
 exec $SHELL
