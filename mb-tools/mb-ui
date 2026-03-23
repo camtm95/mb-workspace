@@ -76,3 +76,7 @@ else
     echo "❌ Lựa chọn không hợp lệ"
     exit 1
 fi
+
+# Cuối cùng, mở một shell mới trong thư mục đã chọn để "giữ" người dùng ở đó
+echo -e "\n${GREEN}🚀 Đã sẵn sàng tại: $(pwd)${RESET}"
+exec $SHELL

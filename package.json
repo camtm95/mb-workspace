@@ -1,10 +1,10 @@
 {
   "name": "mb-workspace",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "One-command installer for MB Workspace",
   "type": "commonjs",
   "bin": {
-    "mb-workspace": "./bin/mb-workspace.js"
+    "mb-workspace": "bin/mb-workspace.js"
   },
   "files": [
     "bin",
