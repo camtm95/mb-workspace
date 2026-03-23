@@ -26,4 +26,12 @@ if ($currentPath -notlike "*$BinDir*") {
     [Environment]::SetEnvironmentVariable("Path", "$currentPath;$BinDir", "User")
 }
 
-Write-Host "Installed. Reopen terminal, then run: mb-ui"
+Write-Host ""
+Write-Host "✅ MB Workspace installed successfully!" -ForegroundColor Green
+Write-Host "---------------------------------------------" -ForegroundColor Cyan
+Write-Host "🚀 Tool will start automatically in a moment..."
+Write-Host "---------------------------------------------" -ForegroundColor Cyan
+Write-Host "👉 Để dùng ngay và truy cập thư mục gốc, hãy chạy lệnh sau:"
+Write-Host "   cd `"$InstallDir`"; mb-ui" -ForegroundColor Yellow
+Write-Host "   (Hoặc chỉ cần mở lại Terminal)"
+Write-Host ""

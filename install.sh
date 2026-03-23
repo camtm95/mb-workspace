@@ -4,6 +4,10 @@ set -euo pipefail
 REPO_URL="https://github.com/camtm95/mb-workspace.git"
 INSTALL_DIR="${MB_WORKSPACE_HOME:-$HOME/.mb-workspace}"
 BIN_DIR="$INSTALL_DIR/mb-tools"
+GREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+CYAN="\033[1;36m"
+RESET="\033[0m"
 
 detect_profile() {
   if [ -n "${ZSH_VERSION:-}" ]; then
@@ -59,9 +63,11 @@ export MB_WORKSPACE_HOME="$INSTALL_DIR"
 export PATH="$MB_WORKSPACE_HOME/mb-tools:$PATH"
 
 echo ""
-echo "✅ MB Workspace installed."
-echo "👉 Run this once:"
-echo "source \"$PROFILE_FILE\""
+echo -e "${GREEN}✅ MB Workspace installed successfully!${RESET}"
+echo -e "${CYAN}---------------------------------------------${RESET}"
+echo -e "🚀 Tool will start automatically in a moment..."
+echo -e "${CYAN}---------------------------------------------${RESET}"
+echo -e "👉 Để dùng ngay và truy cập thư mục gốc, hãy chạy lệnh sau:"
+echo -e "   ${YELLOW}source \"$PROFILE_FILE\" && mb-home${RESET}"
+echo -e "   (Hoặc chỉ cần mở lại Terminal)"
 echo ""
-echo "👉 Then run:"
-echo "mb-ui"

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { spawnSync } = require('child_process');
+const path = require('path');
 
 const isWindows = process.platform === 'win32';
 
@@ -33,4 +34,21 @@ if (isWindows) {
     '-lc',
     'curl -fsSL https://raw.githubusercontent.com/camtm95/mb-workspace/main/install.sh | bash'
   ]);
+}
+
+// After install, try to run mb-ui immediately
+const home = process.env.MB_WORKSPACE_HOME || (isWindows 
+  ? path.join(process.env.USERPROFILE, '.mb-workspace') 
+  : path.join(process.env.HOME, '.mb-workspace'));
+
+const mbUi = path.join(home, 'mb-tools', 'mb-ui');
+
+if (require('fs').existsSync(mbUi)) {
+  console.log('\n🚀 Opening MB Workspace...');
+  if (isWindows) {
+    // On Windows, if mb-ui is a shell script, we might need bash
+    run('bash', [mbUi]);
+  } else {
+    run(mbUi, []);
+  }
 }
