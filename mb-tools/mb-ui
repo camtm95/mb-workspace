@@ -46,18 +46,18 @@ echo -e "\n${CYAN}┌────────── TASK MENU ──────
 CURRENT=$(git branch --show-current)
 mapfile -t branches < <(git branch --format='%(refname:short)' | grep -vE '^(master|main)$')
 
-for i in "${!branches[@]}"; do
-    task=${branches[$i]}
-    status="Pending"
-    if [ "$task" = "$CURRENT" ]; then status="Doing"; fi
-    if grep -Fxq "$task" "$SUBMITTED_FILE"; then status="Submitted"; fi
-
-    color=$GRAY
-    if [ "$status" = "Doing" ]; then color=$GREEN; fi
-    if [ "$status" = "Pending" ]; then color=$YELLOW; fi
-
-    echo -e "│  [${i}] $task (${color}${status}${RESET})"
-done
+if [ ${#branches[@]} -eq 0 ]; then
+    echo -e "│  (Chưa có task nào)"
+else
+    for i in "${!branches[@]}"; do
+        task=${branches[$i]}
+        mark=""
+        color=$YELLOW
+        if grep -Fxq "$task" "$SUBMITTED_FILE"; then mark=" [Đã nộp]"; color=$GRAY; fi
+        if [ "$task" = "$CURRENT" ]; then mark=" [Đang làm]"; color=$GREEN; fi
+        echo -e "│  [${i}] ${color}${task}${RESET}${mark}"
+    done
+fi
 echo -e "│  [N] Tạo task mới"
 echo -e "│  [Q] Thoát"
 echo -e "${CYAN}└──────────────────────────────┘${RESET}"
@@ -72,6 +72,15 @@ elif [[ "$task_choice" == "N" || "$task_choice" == "n" ]]; then
     echo "Tạo và chuyển sang task: $new_task"
 elif [[ "$task_choice" == "Q" || "$task_choice" == "q" ]]; then
     exit 0
+elif [ -n "$task_choice" ]; then
+    # Nếu gõ văn bản thay vì số, tự động hiểu là muốn tạo/chuyển task
+    if git show-ref --verify --quiet "refs/heads/$task_choice"; then
+        git checkout "$task_choice"
+        echo "Đã chuyển sang task: $task_choice"
+    else
+        git checkout -b "$task_choice"
+        echo "Đã tạo và chuyển sang task: $task_choice"
+    fi
 else
     echo "❌ Lựa chọn không hợp lệ"
     exit 1
