@@ -8,9 +8,24 @@ SUBMITTED_FILE="$WORKSPACE/.projects/.mb_submitted"
 mkdir -p "$(dirname "$SUBMITTED_FILE")"
 touch "$SUBMITTED_FILE"
 
-git push origin "$BRANCH"
+REMOTE_URL=$(git config --get remote.origin.url || true)
+
+if [[ "$REMOTE_URL" == *"gitlab"* ]] || ( [[ "$REMOTE_URL" == *"git."* ]] && [[ "$REMOTE_URL" != *"github"* ]] && [[ "$REMOTE_URL" != *"bitbucket"* ]] ); then
+    MAIN_BRANCH="master"
+    if git show-ref --verify --quiet refs/heads/main; then
+        MAIN_BRANCH="main"
+    fi
+    echo -e "🦊 \033[1;36mPhát hiện kho lưu trữ GitLab: Đang tự động tạo Merge Request...\033[0m"
+    git push -o merge_request.create -o merge_request.target="$MAIN_BRANCH" origin "$BRANCH" || git push origin "$BRANCH"
+else
+    git push origin "$BRANCH"
+fi
 
 grep -Fxq "$BRANCH" "$SUBMITTED_FILE" || echo "$BRANCH" >> "$SUBMITTED_FILE"
 
 echo "🚀 Đã push branch: $BRANCH"
-echo "👉 Tạo Merge Request tại GitLab/GitHub: origin/$BRANCH → master hoặc main"
+if [[ "$REMOTE_URL" == *"github"* ]]; then
+    echo "👉 Để tạo Pull Request, click vào link GitHub hiển thị ở trên."
+else
+    echo "👉 Đã hoàn thiện Task và ghim trạng thái thành công."
+fi
