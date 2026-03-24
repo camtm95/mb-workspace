@@ -46,9 +46,13 @@ const mbUi = path.join(home, 'mb-tools', 'mb-ui');
 if (require('fs').existsSync(mbUi)) {
   console.log('\n🚀 Opening MB Workspace...');
   if (isWindows) {
-    // On Windows, if mb-ui is a shell script, we might need bash
-    // Convert backslashes to forward slashes to prevent MSYS bash from treating them as escape chars
-    run('bash', [mbUi.replace(/\\/g, '/')]);
+    const mbUiCmd = mbUi + '.cmd';
+    if (require('fs').existsSync(mbUiCmd)) {
+      run('cmd.exe', ['/c', mbUiCmd]);
+    } else {
+      // Fallback nếu vì lý do nào đó .cmd chưa được tạo
+      run('bash', [mbUi.replace(/\\/g, '/')]);
+    }
   } else {
     run(mbUi, []);
   }
