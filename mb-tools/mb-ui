@@ -86,15 +86,27 @@ handle_task() {
 }
 
 show_task_menu() {
+    local show_all=${1:-false}
+
     echo -e "\n${CYAN}┌────────── TASK MENU ──────────┐${RESET}"
+    echo -e "│  ${YELLOW}Dự án   :${RESET} $(basename "$PWD")"
+    
     CURRENT=$(git branch --show-current)
+    echo -e "│  ${GREEN}Đang làm:${RESET} $CURRENT"
+    echo -e "│"
+    
     # Sắp xếp branch theo thời gian commit mới nhất lên đầu (loại bỏ master/main)
     mapfile -t branches < <(git branch --sort=-committerdate --format='%(refname:short)' | grep -vE '^(master|main)$')
 
     if [ ${#branches[@]} -eq 0 ]; then
         echo -e "│  (Chưa có task nào)"
     else
-        for i in "${!branches[@]}"; do
+        echo -e "│  ${CYAN}--- Danh sách Task ---${RESET}"
+        local max_tasks=${#branches[@]}
+        if [ "$show_all" = false ] && [ $max_tasks -gt 3 ]; then
+            max_tasks=3
+        fi
+        for (( i=0; i<max_tasks; i++ )); do
             task=${branches[$i]}
             mark=""
             color=$YELLOW
@@ -102,18 +114,52 @@ show_task_menu() {
             if [ "$task" = "$CURRENT" ]; then mark=" [Đang làm]"; color=$GREEN; fi
             echo -e "│  [${i}] ${color}${task}${RESET}${mark}"
         done
+        if [ "$show_all" = false ] && [ ${#branches[@]} -gt 3 ]; then
+            echo -e "│  ... (còn $((${#branches[@]} - 3)) task khác)"
+        fi
+    fi
+    
+    echo -e "│"
+    echo -e "│  ${CYAN}--- Chức năng ---${RESET}"
+    echo -e "│  [S] Lưu task đang làm (mb-save)"
+    echo -e "│  [D] Gửi task cho DE (mb-submit)"
+    if [ "$show_all" = false ] && [ ${#branches[@]} -gt 3 ]; then
+        echo -e "│  [L] Hiển thị toàn bộ task"
     fi
     echo -e "│  [N] Tạo task mới"
     echo -e "│  [P] Chuyển dự án khác"
     echo -e "│  [Q] Thoát"
     echo -e "${CYAN}└──────────────────────────────┘${RESET}"
 
-    read -r -p "Chọn task: " task_choice
-    if [[ "$task_choice" == "P" || "$task_choice" == "p" ]]; then
+    read -r -p "Chọn chức năng hoặc task: " task_choice
+    
+    if [[ "$task_choice" == "L" || "$task_choice" == "l" ]]; then
+        show_task_menu true
+        return
+    elif [[ "$task_choice" == "S" || "$task_choice" == "s" ]]; then
+        read -r -p "📝 Nhập message commit: " commit_msg
+        if [ -n "$commit_msg" ]; then
+            "$WORKSPACE/mb-tools/mb-save" "$commit_msg"
+        else
+            echo "❌ Bạn chưa nhập message. Đã hủy lưu."
+        fi
+        sleep 1
+        show_task_menu "$show_all"
+        return
+    elif [[ "$task_choice" == "D" || "$task_choice" == "d" ]]; then
+        "$WORKSPACE/mb-tools/mb-submit"
+        sleep 1
+        show_task_menu "$show_all"
+        return
+    elif [[ "$task_choice" == "P" || "$task_choice" == "p" ]]; then
         show_project_menu
-        show_task_menu
+        show_task_menu false
         return
     elif [[ "$task_choice" =~ ^[0-9]+$ ]] && [ "$task_choice" -lt "${#branches[@]}" ]; then
+        if [ "$show_all" = false ] && [ "$task_choice" -ge 3 ]; then
+            echo "❌ Lựa chọn không hợp lệ (hãy bấm L để hiện toàn bộ task trước)."
+            exit 1
+        fi
         git checkout "${branches[$task_choice]}"
         echo "Đang làm task: ${branches[$task_choice]}"
     elif [[ "$task_choice" == "N" || "$task_choice" == "n" ]]; then
