@@ -60,6 +60,34 @@ show_project_menu() {
     fi
 }
 
+handle_dirty_workspace() {
+    if [[ -z $(git status --porcelain) ]]; then
+        return 0
+    fi
+    
+    echo -e "\n⚠️  ${YELLOW}Bạn đang có mã nguồn vừa sửa nhưng chưa được lưu!${RESET}"
+    echo -e "│  [1] Hãy mang những thay đổi này sang task MỚI"
+    echo -e "│  [2] Lưu lại vào task HIỆN TẠI (mb-save) trước khi chuyển"
+    echo -e "│  [Q] Hủy, tôi không muốn chuyển task nữa"
+    read -r -p "👉 Lựa chọn của bạn [1/2/Q]: " dirty_choice
+
+    if [[ "$dirty_choice" == "1" ]]; then
+        return 0
+    elif [[ "$dirty_choice" == "2" ]]; then
+        read -r -p "📝 Nhập message để lưu task hiện tại: " commit_msg
+        if [ -n "$commit_msg" ]; then
+            "$WORKSPACE/mb-tools/mb-save" "$commit_msg"
+            return 0
+        else
+            echo "❌ Bạn chưa nhập message. Đã hủy."
+            return 1
+        fi
+    else
+        echo "❌ Đã hủy chuyển task."
+        return 1
+    fi
+}
+
 handle_task() {
     local t=$1
     if git show-ref --verify --quiet "refs/heads/$t"; then
@@ -162,22 +190,32 @@ show_task_menu() {
             show_task_menu "$show_all"
             return
         fi
-        git checkout "${branches[$task_choice]}"
-        echo "✅ Đang làm task: ${branches[$task_choice]}"
-        sleep 1
+        
+        handle_dirty_workspace || { sleep 2; show_task_menu "$show_all"; return; }
+        
+        if git checkout "${branches[$task_choice]}"; then
+            echo "✅ Task hiện tại: ${branches[$task_choice]}"
+        else
+            echo "❌ Lỗi: Xung đột mã nguồn! Không thể mang thay đổi sang nhánh cũ."
+        fi
+        sleep 2
         show_task_menu "$show_all"
         return
     elif [[ "$task_choice" == "N" || "$task_choice" == "n" ]]; then
+        handle_dirty_workspace || { sleep 2; show_task_menu "$show_all"; return; }
+        
         read -r -p "Nhập tên task mới: " new_task
         handle_task "$new_task"
-        sleep 1
+        sleep 2
         show_task_menu "$show_all"
         return
     elif [[ "$task_choice" == "Q" || "$task_choice" == "q" ]]; then
         return 0
     elif [ -n "$task_choice" ]; then
+        handle_dirty_workspace || { sleep 2; show_task_menu "$show_all"; return; }
+        
         handle_task "$task_choice"
-        sleep 1
+        sleep 2
         show_task_menu "$show_all"
         return
     else
