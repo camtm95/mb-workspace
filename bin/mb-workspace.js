@@ -47,7 +47,8 @@ if (require('fs').existsSync(mbUi)) {
   console.log('\n🚀 Opening MB Workspace...');
   if (isWindows) {
     // On Windows, if mb-ui is a shell script, we might need bash
-    run('bash', [mbUi]);
+    // Convert backslashes to forward slashes to prevent MSYS bash from treating them as escape chars
+    run('bash', [mbUi.replace(/\\/g, '/')]);
   } else {
     run(mbUi, []);
   }
