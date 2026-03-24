@@ -9,7 +9,8 @@ CURRENT=$(git branch --show-current)
 
 echo "=== TASK LIST ==="
 
-git branch --format='%(refname:short)' | grep -vE '^(master|main)$' | while IFS= read -r branch; do
+# Sắp xếp theo ngày tạo (đưa các task mới nhất lên trên cùng)
+git branch --sort=-committerdate --format='%(refname:short)' | grep -vE '^(master|main)$' | while IFS= read -r branch; do
   MARK=""
   if grep -Fxq "$branch" "$SUBMITTED_FILE"; then
     MARK="(submitted)"
