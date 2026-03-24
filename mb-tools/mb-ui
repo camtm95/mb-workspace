@@ -89,14 +89,25 @@ show_task_menu() {
     local show_all=${1:-false}
 
     echo -e "\n${CYAN}┌────────── TASK MENU ──────────┐${RESET}"
-    echo -e "│  ${YELLOW}Dự án   :${RESET} $(basename "$PWD")"
+    echo -e "│  ${YELLOW}Dự án đang làm:${RESET} $(basename "$PWD")"
     
     CURRENT=$(git branch --show-current)
-    echo -e "│  ${GREEN}Đang làm:${RESET} $CURRENT"
+    echo -e "│  ${GREEN}Task đang làm:${RESET} $CURRENT"
     echo -e "│"
     
     # Sắp xếp branch theo thời gian commit mới nhất lên đầu (loại bỏ master/main)
     mapfile -t branches < <(git branch --sort=-committerdate --format='%(refname:short)' | grep -vE '^(master|main)$')
+
+    echo -e "│  ${CYAN}--- Chức năng ---${RESET}"
+    echo -e "│  [S] Lưu task đang làm"
+    echo -e "│  [D] Golive task"
+    if [ "$show_all" = false ] && [ ${#branches[@]} -gt 3 ]; then
+        echo -e "│  [L] Hiển thị toàn bộ task"
+    fi
+    echo -e "│  [N] Tạo task mới"
+    echo -e "│  [P] Chuyển dự án khác"
+    echo -e "│  [Q] Thoát"
+    echo -e "│"
 
     if [ ${#branches[@]} -eq 0 ]; then
         echo -e "│  (Chưa có task nào)"
@@ -118,17 +129,6 @@ show_task_menu() {
             echo -e "│  ... (còn $((${#branches[@]} - 3)) task khác)"
         fi
     fi
-    
-    echo -e "│"
-    echo -e "│  ${CYAN}--- Chức năng ---${RESET}"
-    echo -e "│  [S] Lưu task đang làm (mb-save)"
-    echo -e "│  [D] Gửi task cho DE (mb-submit)"
-    if [ "$show_all" = false ] && [ ${#branches[@]} -gt 3 ]; then
-        echo -e "│  [L] Hiển thị toàn bộ task"
-    fi
-    echo -e "│  [N] Tạo task mới"
-    echo -e "│  [P] Chuyển dự án khác"
-    echo -e "│  [Q] Thoát"
     echo -e "${CYAN}└──────────────────────────────┘${RESET}"
 
     read -r -p "Chọn chức năng hoặc task: " task_choice
