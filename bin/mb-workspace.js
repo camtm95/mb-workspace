@@ -31,7 +31,7 @@ if (isWindows) {
   ]);
 } else {
   run('bash', [
-    '-lc',
+    '-c',
     'curl -fsSL https://raw.githubusercontent.com/camtm95/mb-workspace/main/install.sh | bash'
   ]);
 }
@@ -54,6 +54,6 @@ if (require('fs').existsSync(mbUi)) {
       run('bash', [mbUi.replace(/\\/g, '/')]);
     }
   } else {
-    run(mbUi, []);
+    run('bash', [mbUi]);
   }
 }
