@@ -24,7 +24,7 @@ Write-Host "Configuring Windows command wrappers..."
 $tools = Get-ChildItem -Path $BinDir -File | Where-Object { $_.Extension -eq "" }
 foreach ($tool in $tools) {
     $cmdFile = "$($tool.FullName).cmd"
-    $cmdContent = "@ECHO OFF`r`nbash `"%~dp0$($tool.Name)`" %*"
+    $cmdContent = "@ECHO OFF`r`nset `"SCRIPT_DIR=%~dp0`"`r`nset `"SCRIPT_DIR=%SCRIPT_DIR:\=/%`"`r`nbash `"%SCRIPT_DIR%$($tool.Name)`" %*"
     Set-Content -Path $cmdFile -Value $cmdContent -Encoding ASCII
 }
 
