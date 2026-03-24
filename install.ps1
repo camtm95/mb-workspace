@@ -19,6 +19,15 @@ if (Test-Path "$InstallDir\.git") {
 New-Item -ItemType Directory -Force -Path "$InstallDir\projects" | Out-Null
 New-Item -ItemType Directory -Force -Path "$InstallDir\.projects" | Out-Null
 
+# Tự động tạo các file .cmd wrapper cho CMD/PowerShell trên Windows
+Write-Host "Configuring Windows command wrappers..."
+$tools = Get-ChildItem -Path $BinDir -File | Where-Object { $_.Extension -eq "" }
+foreach ($tool in $tools) {
+    $cmdFile = "$($tool.FullName).cmd"
+    $cmdContent = "@ECHO OFF`r`nbash `"%~dp0$($tool.Name)`" %*"
+    Set-Content -Path $cmdFile -Value $cmdContent -Encoding ASCII
+}
+
 [Environment]::SetEnvironmentVariable("MB_WORKSPACE_HOME", $InstallDir, "User")
 
 $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
