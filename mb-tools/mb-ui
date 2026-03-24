@@ -47,7 +47,12 @@ open_ide_and_exit() {
         echo "Hiển thị thư mục trên cửa sổ hiện tại..."
         cursor -r . >/dev/null 2>&1 || true
     fi
-    exit 0
+    # Giữ người dùng ở lại thư mục project vừa chọn
+    if [ -n "$SHELL" ]; then
+        exec "$SHELL"
+    else
+        exec bash
+    fi
 }
 
 show_project_menu() {
