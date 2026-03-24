@@ -8,6 +8,11 @@ if [ -z "$TASK" ]; then
   exit 1
 fi
 
+TASK=$(echo "$TASK" | awk '{print tolower($0)}')
+TASK=$(echo "$TASK" | sed -e 's/[àáạảãâầấậẩẫăằắặẳẵ]/a/g' -e 's/[èéẹẻẽêềếệểễ]/e/g' -e 's/[ìíịỉĩ]/i/g' -e 's/[òóọỏõôồốộổỗơờớợởỡ]/o/g' -e 's/[ùúụủũưừứựửữ]/u/g' -e 's/[ỳýỵỷỹ]/y/g' -e 's/đ/d/g')
+TASK=$(echo "$TASK" | sed -e 's/[^a-z0-9]/-/g' -e 's/-\{2,\}/-/g' -e 's/^-//' -e 's/-$//')
+
+
 if ! git diff --quiet || ! git diff --cached --quiet; then
   echo "⚠️ Bạn có thay đổi chưa commit. Hãy mb-save trước."
   exit 1

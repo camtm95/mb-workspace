@@ -268,6 +268,12 @@ show_task_menu() {
         
         read -r -p "Nhập tên task mới: " new_task
         if [[ "$new_task" == "\q" ]]; then echo ""; exit 0; fi
+        
+        # Format task name
+        new_task=$(echo "$new_task" | awk '{print tolower($0)}')
+        new_task=$(echo "$new_task" | sed -e 's/[àáạảãâầấậẩẫăằắặẳẵ]/a/g' -e 's/[èéẹẻẽêềếệểễ]/e/g' -e 's/[ìíịỉĩ]/i/g' -e 's/[òóọỏõôồốộổỗơờớợởỡ]/o/g' -e 's/[ùúụủũưừứựửữ]/u/g' -e 's/[ỳýỵỷỹ]/y/g' -e 's/đ/d/g')
+        new_task=$(echo "$new_task" | sed -e 's/[^a-z0-9]/-/g' -e 's/-\{2,\}/-/g' -e 's/^-//' -e 's/-$//')
+        
         handle_task "$new_task"
         sleep 2
         show_task_menu "$show_all"

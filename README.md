@@ -1,77 +1,77 @@
 # 🚀 MB Workspace
 
-Bộ công cụ quản lý dự án và Git thông minh dành cho team phát triển, giúp tối ưu hóa quy trình làm việc (clone code, quản lý branch/task, commit, submit) một cách nhanh chóng và an toàn nhất. Bạn có thể sử dụng qua giao diện dòng lệnh (UI) cực kỳ trực quan hoặc các lệnh gõ tắt siêu tốc.
+Bộ công cụ CLI cực kỳ thông thái giúp bạn quản lý dự án, xử lý vòng đời Git (clone, tạo task, chuyển nhánh, commit, submit) cực kỳ trơn tru. Hệ thống tự động cảnh báo xung đột, tránh mất mã nguồn, và đặc biệt dành cho những bạn không muốn gõ/nhớ lệnh Git dài dòng.
 
 ---
 
-## 💻 1. Hướng dẫn cài đặt
+## 💻 1. Cài đặt và cập nhật (Bằng lệnh tự động)
 
-Bạn có thể cài đặt MB Workspace cực kỳ dễ dàng bằng 1 trong 2 cách sau:
+Cách **nhanh nhất** và **khuyên dùng** để cài hoặc nâng cấp phiên bản mới nhất (yêu cầu máy có cài Node.js):
 
-### Cách 1: Cài qua NPM (Khuyên dùng)
-Nếu máy bạn đã có sẵn Node.js:
+Mở terminal ở bất kỳ đâu và gõ lệnh:
 ```bash
-npx mb-workspace@latest
+npx mb-workspace
 ```
-*(Lệnh này tự động nhận diện hệ điều hành Windows hoặc MacOS/Linux/WSL để cài đặt công cụ tương ứng)*
+*(Lệnh này tự động nhận diện hệ điều hành Windows/MacOS/Linux để cài đặt, và sẽ cập nhật nếu bạn đã cài rồi)*
 
-### Cách 2: Cài trực tiếp từ Script (Không cần Node.js)
+> **Lưu ý:** Cài xong hãy tắt terminal hiện tại và bật cái mới lên để hệ thống nhận diện câu lệnh nhé! Công cụ cũng sẽ tự động lưu lại mật khẩu Git giúp bạn ở lần yêu cầu gõ mật khẩu tiếp theo.
+
+---
+
+## 🛠 2. Cài đặt thủ công (Không dùng NPM)
+
+Nếu không có sẵn Node.js, bạn copy 1 trong 2 dòng lệnh tương ứng với máy mình để chạy nhé:
+
 **👉 Dành cho MacOS / Linux / WSL (Ubuntu):**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/camtm95/mb-workspace/main/install.sh | bash
 ```
 
-**👉 Dành cho Windows PowerShell (Chạy dưới quyền Admin):**
+**👉 Dành cho Windows PowerShell (Mở bằng quyền Administrator):**
 ```powershell
 iwr -useb https://raw.githubusercontent.com/camtm95/mb-workspace/main/install.ps1 | iex
 ```
 
-> **Lưu ý sau khi cài đặt:** Bạn hãy tắt Terminal hiện tại và mở lại một cái mới để các lệnh có hiệu lực. Hệ thống sẽ tự động cấu hình tính năng ghi nhớ mật khẩu Git (`credential.helper store`) cho bạn để không phải gõ lại password mỗi khi pull/push code nữa.
-
 ---
 
-## 🌟 2. Hướng dẫn sử dụng bằng giao diện (UI)
+## 🌟 3. Hướng dẫn sử dụng bằng giao diện Menu (UI)
 
-Giao diện UI là trái tim của bộ công cụ, cung cấp cho bạn mọi thứ trên một màn hình duy nhất mà không cần phải nhớ lệnh Git nào.
+Chỉ cần gõ 1 lệnh thần thánh duy nhất ở bất kỳ đâu để hiển thị menu thông minh:
 
-Chỉ cần gõ 1 trong 2 lệnh sau ở bất kỳ đâu trong terminal:
 ```bash
-mb-ui
-# hoặc gọi bằng tên viết tắt siêu nhanh:
 ecu
+# hoặc dùng lệnh: mb-ui
 ```
 
-### Chức năng chính trong UI:
-Hệ thống sẽ dựa vào vị trí thư mục hiện tại của bạn để dọn đường và hiển thị Menu phù hợp:
+Hệ thống sẽ **tự động nhìn xem bạn đang đứng ở đâu** để đưa ra màn hình phù hợp:
 
-#### A. MB WORKSPACE MENU (Quản lý dự án):
-Nếu bạn đang ở ngoài thư mục dự án, menu này sẽ hiện ra:
-*   **Danh sách dự án:** Liệt kê toàn bộ các dự án bạn đã tải về máy, được tự động sắp xếp theo thứ tự ưu tiên (dự án bạn code gần đây nhất sẽ nằm trên cùng). Chọn số thứ tự để vào code ngay.
-*   **`[C] Clone project`**: Tự động chặn lỗi bừa bộn báo động, đưa bạn về thư mục gốc, tải code về an toàn, và nhảy thẳng vào dự án mới.
+### 📁 A. Màn hình chọn Dự án (MB WORKSPACE)
+Sẽ hiện ra khi bạn đang đứng ở một thư mục bất kỳ bên ngoài:
+*   **[0], [1], [2]...:** Liệt kê các project bạn có trong máy. Dự án nào bạn code gần đây nhất sẽ nhảy lên đầu. Chọn số thứ tự để hệ thống **tự động mở IDE** (VS Code, Cursor...) lên dự án đó.
+*   **[C] Clone project mới:** Dán link kho chứa mã nguồn vào, hệ thống tự clone an toàn về máy và trả lại Menu để bạn tải lên IDE làm việc.
+*   **[Q] Thoát:** Đóng Menu.
 
-#### B. TASK MENU (Quản lý công việc):
-Nếu bạn đang đứng bên trong dự án (hoặc sau khi chọn dự án), không gian làm việc này sẽ hiện ra đầu tiên:
-*   **Hiển thị thông minh:** Các nhánh (task) mới nhất, mới code xong sẽ tự trồi lên trên cùng theo thời gian thực để bạn dễ dàng ấn chọn số `0`, `1`... Báo hiệu trực quan bằng màu sắc trạng thái: Xanh `[Đang làm]`, Xám `[Đã nộp]`.
-*   **Bảo vệ mã nguồn tuyệt đối:** Nếu code đang sửa dở mà bạn vô tình muốn chuyển task khác, hệ thống sẽ chặn đứng bạn lại và đưa ra tuỳ chọn: _(1) Mang code đi theo task MỚI_ hoặc _(2) Lưu lại ngay tại chỗ vào task CŨ_. Tránh mất source code hay gây ra conflict.
-*   **Thao tác nhanh không cần thoát menu**:
-    *   `[N]`: Tạo task mới (Có cơ chế tải task từ origin nếu phát hiện trùng tên nhánh trên mạng).
-    *   `[S]`: Lưu task đang làm (Chỉ cần điền nội dung thay đổi, hệ thống tự động commit & push).
-    *   `[D]`: Golive (Submit) task hoàn thiện cho reviewer/DE.
-    *   `[C]`: Liếc xem nhanh trạng thái các file (bị sửa/xóa/thêm) hiện tại mà không phải thoát menu.
-    *   `[L]`: Load full toàn bộ danh sách lịch sử task của dự án này.
-    *   `[P]`: Bật lại menu Project.
+### 📝 B. Màn hình quản lý Task (TASK MENU)
+Sẽ hiện ra khi bạn dùng lệnh `ecu` mà đã đứng sẵn trong thư mục của 1 dự án (Hoặc gõ terminal bên trong IDE):
+*   **Liệt kê Task thông minh:** Các nhánh (branch) bạn đang làm sẽ nằm trên cùng. Bạn chỉ cần gõ số `0`, `1`... để nhảy qua lại giữa các tính năng. **Đặc biệt: Nếu bạn đang viết dở code mà chưa lưu, công cụ sẽ chặn chặn đứng bạn lại và hỏi bạn muốn lưu hay mang code theo, siêu an toàn.** (Màu xanh: Đang mần, Màu Vàng: Bình thường, Màu Xám: Đã nộp/Golive).
+*   **[N] Tạo task mới:** Điền tên nhánh mới, nếu mạng đã có file nhánh trùng tên, hệ thống hỏi bạn có kéo về không.
+*   **[S] Lưu task đang làm:** Nhập lời nhắn xong hệ thống gộp 3 lệnh Git (Add + Commit + Push) trong 1 giây.
+*   **[D] Golive task:** Đánh dấu task của bạn là đã làm xong, đã nộp mã nguồn. 
+*   **[C] Xem file thay đổi:** Liếc xem có bao nhiêu file thư mục xanh đỏ đang bị thay đổi mà không cần đóng Menu.
+*   **[L] Hiển thị toàn bộ:** Xem list full các branch cũ (Mặc định ẩn bớt 3 task mới cho gọn).
+*   **[P] Chuyển dự án:** Trở lại Màn hình Project.
+
+> **💡 Thoát ngang mọi lúc:** gõ `\q` rồi Enter.
 
 ---
 
-## ⚡ 3. Hướng dẫn sử dụng bằng dòng lệnh rời (mb-xxx)
+## ⚡ 4. Các lệnh rời thao tác nhanh (mb-xxx)
 
-Dành cho những bạn thích tự do gõ lệnh (CLI mode), hoặc muốn viết script tự động tự chế lại luồng làm việc cho mình. 
+Nếu bạn không muốn nhìn Menu mà muốn "ra lệnh trực tiếp", đây là bộ công cụ gõ tắt cho bạn:
 
-| Câu lệnh | Mô tả & Chức năng |
-| :--- | :--- |
-| `mb-home` | Lệnh di chuyển "xuyên không" từ bất kì thư mục nào về thẳng thư mục gốc của MB Workspace. |
-| `mb-ui` / `ecu` | Mở giao diện thông minh tích hợp (như mô tả ở phần 2). |
-| `mb-list` | In ra màn hình danh sách các task (nhánh) trong dự án hiện hành, tự động xếp task thời gian mới nhất lên đầu. Nhấn phím `q` để thoát danh sách. |
-| `mb-task <tên_task>` | Lệnh 2-trong-1 siêu tiện: Tự động kiểm tra mạng để tải branch từ origin về nếu có sẵn, hoặc tự tạo nhánh mới nếu chưa ai tạo. (Cũng tích hợp tính năng check chống mất code nếu đang có file sửa dở). |
-| `mb-save "<lọc_nhắn>"` | Lưu lại (Git Add + Commit + Push) trong chớp mắt. VD: `mb-save "Fix api thanh toan"` |
-| `mb-submit` | Đánh dấu task đã được hoàn thành (trên UI sẽ đổi màu đoạn text task đó thành Xám `[Đã nộp]`) và chuẩn bị bước cuối trước khi ra mắt golive. |
+*   `mb-home`: Dịch chuyển nhanh (cd) từ chỗ bất kỳ về thẳng thư mục chứa tất cả project.
+*   `mb-list`: In nhanh ra danh sách các task trong project bạn đang làm.
+*   `mb-task <tên_task>`: Chuyển nhanh qua nhánh mới lập tức, tự kéo code về nếu mạng có sẵn. Vẫn tích hợp chống vô tình mất code sửa dở.
+*   `mb-save "<lời_nhắn>"`: Lưu toàn bộ (Add + Commit + Push) tức thì.
+  *VD: `mb-save "Sửa xong bug giao diện login"`*
+*   `mb-submit`: Đánh dấu đã nộp code thành công trên hệ thống.
