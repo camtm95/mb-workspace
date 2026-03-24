@@ -18,7 +18,18 @@ git fetch
 if git show-ref --verify --quiet "refs/heads/$TASK"; then
   git checkout "$TASK"
 else
-  git checkout -b "$TASK"
+  if git ls-remote --exit-code --heads origin "$TASK" >/dev/null 2>&1; then
+    echo -e "\n⚠️  \033[1;33mTask '$TASK' ĐÃ TỒN TẠI trên origin!\033[0m"
+    read -r -p "👉 Bạn muốn Tải về (y) hay Hủy để chọn tên khác (n)? [y/N]: " ans
+    if [[ "$ans" =~ ^[Yy]$ ]]; then
+      git checkout -t "origin/$TASK"
+    else
+      echo "❌ Bị hủy."
+      exit 1
+    fi
+  else
+    git checkout -b "$TASK"
+  fi
 fi
 
 echo "🚀 Đang làm task: $TASK"
