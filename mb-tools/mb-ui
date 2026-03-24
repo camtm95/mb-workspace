@@ -89,10 +89,10 @@ show_task_menu() {
     local show_all=${1:-false}
 
     echo -e "\n${CYAN}┌────────── TASK MENU ──────────┐${RESET}"
-    echo -e "│  ${YELLOW}Dự án đang làm:${RESET} $(basename "$PWD")"
+    echo -e "│  ${YELLOW}Project:${RESET} $(basename "$PWD")"
     
     CURRENT=$(git branch --show-current)
-    echo -e "│  ${GREEN}Task đang làm:${RESET} $CURRENT"
+    echo -e "│  ${GREEN}Task:${RESET} $CURRENT"
     echo -e "│"
     
     # Sắp xếp branch theo thời gian commit mới nhất lên đầu (loại bỏ master/main)
@@ -184,13 +184,13 @@ show_task_menu
 # Mở IDE nếu có trên chính cửa sổ hiện tại (dùng cờ -r để reuse-window)
 if command -v antigravity &> /dev/null; then
     echo "Hiển thị thư mục trên Antigravity IDE..."
-    antigravity -r .
+    antigravity -r . >/dev/null 2>&1 || true
 elif command -v code &> /dev/null; then
     echo "Hiển thị thư mục trên cửa sổ hiện tại..."
-    code -r .
+    code -r . >/dev/null 2>&1 || true
 elif command -v cursor &> /dev/null; then
     echo "Hiển thị thư mục trên cửa sổ hiện tại..."
-    cursor -r .
+    cursor -r . >/dev/null 2>&1 || true
 fi
 
 # Cuối cùng, mở một shell mới trong thư mục đã chọn để "giữ" người dùng ở đó
