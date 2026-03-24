@@ -116,8 +116,15 @@ handle_task() {
                 exit 1
             fi
         else
+            local main_branch="master"
+            if git show-ref --verify --quiet "refs/heads/main"; then
+                main_branch="main"
+            fi
+            echo -e "\n🔄 ${YELLOW}Đang chuyển về nhánh chính ($main_branch) và cập nhật...${RESET}"
+            git checkout "$main_branch"
+            git pull origin "$main_branch" || true
             git checkout -b "$t"
-            echo "Đã tạo và chuyển sang task: $t"
+            echo "✅ Đã tạo và chuyển sang task mới: $t"
         fi
     fi
 }
@@ -231,13 +238,6 @@ show_task_menu() {
         return
     elif [[ "$task_choice" == "Q" || "$task_choice" == "q" ]]; then
         return 0
-    elif [ -n "$task_choice" ]; then
-        handle_dirty_workspace || { sleep 2; show_task_menu "$show_all"; return; }
-        
-        handle_task "$task_choice"
-        sleep 2
-        show_task_menu "$show_all"
-        return
     else
         echo "❌ Lựa chọn không hợp lệ"
         sleep 1

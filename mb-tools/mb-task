@@ -28,6 +28,13 @@ else
       exit 1
     fi
   else
+    MAIN_BRANCH="master"
+    if git show-ref --verify --quiet refs/heads/main; then
+      MAIN_BRANCH="main"
+    fi
+    echo -e "\n🔄 \033[1;33mĐang chuyển về nhánh chính ($MAIN_BRANCH) và cập nhật...\033[0m"
+    git checkout "$MAIN_BRANCH"
+    git pull origin "$MAIN_BRANCH" || true
     git checkout -b "$TASK"
   fi
 fi
