@@ -30,6 +30,8 @@ set "SCRIPT_DIR=%~dp0"
 set "SCRIPT_DIR=%SCRIPT_DIR:\=/%"
 IF EXIST "%PROGRAMFILES%\Git\bin\bash.exe" (
     "%PROGRAMFILES%\Git\bin\bash.exe" "%SCRIPT_DIR%$($tool.Name)" %*
+) ELSE IF EXIST "%LOCALAPPDATA%\Programs\Git\bin\bash.exe" (
+    "%LOCALAPPDATA%\Programs\Git\bin\bash.exe" "%SCRIPT_DIR%$($tool.Name)" %*
 ) ELSE (
     bash "%SCRIPT_DIR%$($tool.Name)" %*
 )
