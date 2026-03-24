@@ -37,7 +37,8 @@ mkdir -p "$INSTALL_DIR"
 
 if [ -d "$INSTALL_DIR/.git" ]; then
   echo "🔄 Existing install found, updating..."
-  git -C "$INSTALL_DIR" pull --ff-only
+  git -C "$INSTALL_DIR" fetch origin
+  git -C "$INSTALL_DIR" reset --hard origin/main
 else
   echo "📦 Cloning repository..."
   rm -rf "$INSTALL_DIR"

@@ -10,7 +10,8 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 }
 
 if (Test-Path "$InstallDir\.git") {
-    git -C $InstallDir pull --ff-only
+    git -C $InstallDir fetch origin
+    git -C $InstallDir reset --hard origin/main
 } else {
     if (Test-Path $InstallDir) { Remove-Item $InstallDir -Recurse -Force }
     git clone $RepoUrl $InstallDir
