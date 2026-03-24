@@ -65,27 +65,36 @@ handle_dirty_workspace() {
         return 0
     fi
     
-    echo -e "\n⚠️  ${YELLOW}Bạn đang có mã nguồn vừa sửa nhưng chưa được lưu!${RESET}"
-    echo -e "│  [1] Hãy mang những thay đổi này sang task MỚI"
-    echo -e "│  [2] Lưu lại vào task HIỆN TẠI (mb-save) trước khi chuyển"
-    echo -e "│  [Q] Hủy, tôi không muốn chuyển task nữa"
-    read -r -p "👉 Lựa chọn của bạn [1/2/Q]: " dirty_choice
+    while true; do
+        echo -e "\n⚠️  ${YELLOW}Bạn đang có mã nguồn vừa sửa nhưng chưa được lưu!${RESET}"
+        echo -e "│  [1] Hãy mang những thay đổi này sang task MỚI"
+        echo -e "│  [2] Lưu lại vào task HIỆN TẠI trước khi chuyển"
+        echo -e "│  [C] Xem danh sách các file đang bị thay đổi"
+        echo -e "│  [Q] Hủy, tôi không muốn chuyển task nữa"
+        read -r -p "👉 Lựa chọn của bạn [1/2/C/Q]: " dirty_choice
 
-    if [[ "$dirty_choice" == "1" ]]; then
-        return 0
-    elif [[ "$dirty_choice" == "2" ]]; then
-        read -r -p "📝 Nhập message để lưu task hiện tại: " commit_msg
-        if [ -n "$commit_msg" ]; then
-            "$WORKSPACE/mb-tools/mb-save" "$commit_msg"
+        if [[ "$dirty_choice" == "1" ]]; then
             return 0
-        else
-            echo "❌ Bạn chưa nhập message. Đã hủy."
+        elif [[ "$dirty_choice" == "2" ]]; then
+            read -r -p "📝 Nhập message để lưu task hiện tại: " commit_msg
+            if [ -n "$commit_msg" ]; then
+                "$WORKSPACE/mb-tools/mb-save" "$commit_msg"
+                return 0
+            else
+                echo "❌ Bạn chưa nhập message. Đã hủy."
+                return 1
+            fi
+        elif [[ "$dirty_choice" == "C" || "$dirty_choice" == "c" ]]; then
+            echo -e "\n${CYAN}--- Danh sách file thay đổi ---${RESET}"
+            git status -s
+            echo -e "${CYAN}-------------------------------${RESET}\n"
+        elif [[ "$dirty_choice" == "Q" || "$dirty_choice" == "q" ]]; then
+            echo "❌ Đã hủy chuyển task."
             return 1
+        else
+            echo "❌ Lựa chọn không hợp lệ."
         fi
-    else
-        echo "❌ Đã hủy chuyển task."
-        return 1
-    fi
+    done
 }
 
 handle_task() {
@@ -129,6 +138,7 @@ show_task_menu() {
     echo -e "│  ${CYAN}--- Chức năng ---${RESET}"
     echo -e "│  [S] Lưu task đang làm"
     echo -e "│  [D] Golive task"
+    echo -e "│  [C] Xem các file thay đổi"
     if [ "$show_all" = false ] && [ ${#branches[@]} -gt 3 ]; then
         echo -e "│  [L] Hiển thị toàn bộ task"
     fi
@@ -163,6 +173,16 @@ show_task_menu() {
     
     if [[ "$task_choice" == "L" || "$task_choice" == "l" ]]; then
         show_task_menu true
+        return
+    elif [[ "$task_choice" == "C" || "$task_choice" == "c" ]]; then
+        echo -e "\n${CYAN}--- Danh sách file thay đổi ---${RESET}"
+        git status -s
+        if [[ -z $(git status --porcelain) ]]; then
+            echo "(Không có thay đổi nào)"
+        fi
+        echo -e "${CYAN}-------------------------------${RESET}\n"
+        read -r -p "Ấn Enter để quay lại menu..."
+        show_task_menu "$show_all"
         return
     elif [[ "$task_choice" == "S" || "$task_choice" == "s" ]]; then
         read -r -p "📝 Nhập message commit: " commit_msg
