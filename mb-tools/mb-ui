@@ -158,20 +158,33 @@ show_task_menu() {
     elif [[ "$task_choice" =~ ^[0-9]+$ ]] && [ "$task_choice" -lt "${#branches[@]}" ]; then
         if [ "$show_all" = false ] && [ "$task_choice" -ge 3 ]; then
             echo "❌ Lựa chọn không hợp lệ (hãy bấm L để hiện toàn bộ task trước)."
-            exit 1
+            sleep 1
+            show_task_menu "$show_all"
+            return
         fi
         git checkout "${branches[$task_choice]}"
-        echo "Đang làm task: ${branches[$task_choice]}"
+        echo "✅ Đang làm task: ${branches[$task_choice]}"
+        sleep 1
+        show_task_menu "$show_all"
+        return
     elif [[ "$task_choice" == "N" || "$task_choice" == "n" ]]; then
         read -r -p "Nhập tên task mới: " new_task
         handle_task "$new_task"
+        sleep 1
+        show_task_menu "$show_all"
+        return
     elif [[ "$task_choice" == "Q" || "$task_choice" == "q" ]]; then
-        exit 0
+        return 0
     elif [ -n "$task_choice" ]; then
         handle_task "$task_choice"
+        sleep 1
+        show_task_menu "$show_all"
+        return
     else
         echo "❌ Lựa chọn không hợp lệ"
-        exit 1
+        sleep 1
+        show_task_menu "$show_all"
+        return
     fi
 }
 
@@ -181,18 +194,23 @@ fi
 
 show_task_menu
 
-# Mở IDE nếu có trên chính cửa sổ hiện tại (dùng cờ -r để reuse-window)
-if command -v antigravity &> /dev/null; then
-    echo "Hiển thị thư mục trên Antigravity IDE..."
-    antigravity -r . >/dev/null 2>&1 || true
-elif command -v code &> /dev/null; then
-    echo "Hiển thị thư mục trên cửa sổ hiện tại..."
-    code -r . >/dev/null 2>&1 || true
-elif command -v cursor &> /dev/null; then
-    echo "Hiển thị thư mục trên cửa sổ hiện tại..."
-    cursor -r . >/dev/null 2>&1 || true
-fi
+if [ "$IN_PROJECT" = false ]; then
+    # Mở IDE nếu có trên chính cửa sổ hiện tại (dùng cờ -r để reuse-window)
+    if command -v antigravity &> /dev/null; then
+        echo "Hiển thị thư mục trên Antigravity IDE..."
+        antigravity -r . >/dev/null 2>&1 || true
+    elif command -v code &> /dev/null; then
+        echo "Hiển thị thư mục trên cửa sổ hiện tại..."
+        code -r . >/dev/null 2>&1 || true
+    elif command -v cursor &> /dev/null; then
+        echo "Hiển thị thư mục trên cửa sổ hiện tại..."
+        cursor -r . >/dev/null 2>&1 || true
+    fi
 
-# Cuối cùng, mở một shell mới trong thư mục đã chọn để "giữ" người dùng ở đó
-echo -e "\n${GREEN}🚀 Đã sẵn sàng tại: $(pwd)${RESET}"
-exec $SHELL
+    # Cuối cùng, mở một shell mới trong thư mục đã chọn để "giữ" người dùng ở đó
+    echo -e "\n${GREEN}🚀 Đã sẵn sàng tại: $(pwd)${RESET}"
+    exec $SHELL
+else
+    echo -e "\n${GREEN}🚀 Đã thoát MB Workspace.${RESET}"
+    exit 0
+fi
