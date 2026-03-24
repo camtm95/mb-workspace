@@ -22,9 +22,19 @@ RESET="\033[0m"
 
 # Kiem tra xem dang o trong 1 project hay khong
 IN_PROJECT=false
-if [[ "$PWD" == "$PROJECTS_DIR/"* ]] && [ -d .git ]; then
+
+NORMALIZED_PWD="$PWD"
+NORMALIZED_PROJECTS_DIR="$PROJECTS_DIR"
+if command -v cygpath >/dev/null 2>&1; then
+    NORMALIZED_PWD="$(cygpath -u "$NORMALIZED_PWD")"
+    NORMALIZED_PROJECTS_DIR="$(cygpath -u "$NORMALIZED_PROJECTS_DIR")"
+fi
+
+shopt -s nocasematch
+if [[ "$NORMALIZED_PWD" == "$NORMALIZED_PROJECTS_DIR/"* ]] && [ -d .git ]; then
     IN_PROJECT=true
 fi
+shopt -u nocasematch
 
 show_project_menu() {
     echo -e "${CYAN}┌──────────── MB WORKSPACE ────────────┐${RESET}"
