@@ -14,7 +14,7 @@ npx mb-workspace
 ```
 *(Lệnh này tự động nhận diện hệ điều hành Windows/MacOS/Linux để cài đặt, và sẽ cập nhật nếu bạn đã cài rồi)*
 
-> **Lưu ý:** Cài xong hãy tắt terminal hiện tại và bật cái mới lên để hệ thống nhận diện câu lệnh nhé! Công cụ cũng sẽ tự động lưu lại mật khẩu Git giúp bạn ở lần yêu cầu gõ mật khẩu tiếp theo.
+> **Lưu ý:** Cài xong hãy tắt tất cả terminal, IDE lập trình đang mở và bật lại để hệ thống nhận diện câu lệnh nhé!
 
 ---
 
