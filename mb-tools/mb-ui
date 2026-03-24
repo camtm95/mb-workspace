@@ -36,6 +36,20 @@ if [[ "$NORMALIZED_PWD" == "$NORMALIZED_PROJECTS_DIR/"* ]] && [ -d .git ]; then
 fi
 shopt -u nocasematch
 
+open_ide_and_exit() {
+    if command -v antigravity &> /dev/null; then
+        echo "Hiển thị thư mục trên Antigravity IDE..."
+        antigravity -r . >/dev/null 2>&1 || true
+    elif command -v code &> /dev/null; then
+        echo "Hiển thị thư mục trên cửa sổ hiện tại..."
+        code -r . >/dev/null 2>&1 || true
+    elif command -v cursor &> /dev/null; then
+        echo "Hiển thị thư mục trên cửa sổ hiện tại..."
+        cursor -r . >/dev/null 2>&1 || true
+    fi
+    exit 0
+}
+
 show_project_menu() {
     echo -e "${CYAN}┌──────────── MB WORKSPACE ────────────┐${RESET}"
     # Sắp xếp project theo thời gian tạo/sửa mới nhất lên đầu
@@ -58,14 +72,17 @@ show_project_menu() {
         if [[ "$repo" == "\q" ]]; then echo ""; exit 0; fi
         name=$(basename "$repo" .git)
         git clone "$repo" "$PROJECTS_DIR/$name"
-        cd "$PROJECTS_DIR/$name" || exit 1
-        echo "Đã clone và vào project: $name"
+        echo -e "\n✅ Đã clone xong project: $name"
+        # Tải lại menu
+        show_project_menu
+        return
     elif [[ "$choice" == "Q" || "$choice" == "q" ]]; then
         exit 0
     elif [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -lt "${#projects[@]}" ]; then
         project=${projects[$choice]}
         cd "$PROJECTS_DIR/$project" || exit 1
         echo "Đã chọn project: $project"
+        open_ide_and_exit
     else
         echo "❌ Lựa chọn không hợp lệ"
         exit 1
@@ -271,23 +288,5 @@ fi
 
 show_task_menu
 
-if [ "$IN_PROJECT" = false ]; then
-    # Mở IDE nếu có trên chính cửa sổ hiện tại (dùng cờ -r để reuse-window)
-    if command -v antigravity &> /dev/null; then
-        echo "Hiển thị thư mục trên Antigravity IDE..."
-        antigravity -r . >/dev/null 2>&1 || true
-    elif command -v code &> /dev/null; then
-        echo "Hiển thị thư mục trên cửa sổ hiện tại..."
-        code -r . >/dev/null 2>&1 || true
-    elif command -v cursor &> /dev/null; then
-        echo "Hiển thị thư mục trên cửa sổ hiện tại..."
-        cursor -r . >/dev/null 2>&1 || true
-    fi
-
-    # Cuối cùng, mở một shell mới trong thư mục đã chọn để "giữ" người dùng ở đó
-    echo -e "\n${GREEN}🚀 Đã sẵn sàng tại: $(pwd)${RESET}"
-    exec $SHELL
-else
-    echo -e "\n${GREEN}🚀 Đã thoát MB Workspace.${RESET}"
-    exit 0
-fi
+echo -e "\n${GREEN}🚀 Đã thoát MB Workspace.${RESET}"
+exit 0
