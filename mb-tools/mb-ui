@@ -47,6 +47,7 @@ show_project_menu() {
     echo -e "│  [Q] Thoát"
     echo -e "${CYAN}└──────────────────────────────────────┘${RESET}"
     read -r -p "Chọn project hoặc clone: " choice
+    if [[ "$choice" == "\q" ]]; then echo ""; exit 0; fi
 
     if [[ "$choice" == "C" || "$choice" == "c" ]]; then
         if [ "$PWD" != "$WORKSPACE" ]; then
@@ -54,6 +55,7 @@ show_project_menu() {
             cd "$WORKSPACE" || exit 1
         fi
         read -r -p "Nhập URL repo: " repo
+        if [[ "$repo" == "\q" ]]; then echo ""; exit 0; fi
         name=$(basename "$repo" .git)
         git clone "$repo" "$PROJECTS_DIR/$name"
         cd "$PROJECTS_DIR/$name" || exit 1
@@ -82,11 +84,13 @@ handle_dirty_workspace() {
         echo -e "│  [C] Xem danh sách các file đang bị thay đổi"
         echo -e "│  [Q] Hủy, tôi không muốn chuyển task nữa"
         read -r -p "👉 Lựa chọn của bạn [1/2/C/Q]: " dirty_choice
+        if [[ "$dirty_choice" == "\q" ]]; then echo ""; exit 0; fi
 
         if [[ "$dirty_choice" == "1" ]]; then
             return 0
         elif [[ "$dirty_choice" == "2" ]]; then
             read -r -p "📝 Nhập message để lưu task hiện tại: " commit_msg
+            if [[ "$commit_msg" == "\q" ]]; then echo ""; exit 0; fi
             if [ -n "$commit_msg" ]; then
                 "$WORKSPACE/mb-tools/mb-save" "$commit_msg"
                 return 0
@@ -117,6 +121,7 @@ handle_task() {
         if git ls-remote --exit-code --heads origin "$t" >/dev/null 2>&1; then
             echo -e "\n⚠️  ${YELLOW}Task '$t' ĐÃ TỒN TẠI trên origin!${RESET}"
             read -r -p "👉 Bạn muốn Tải về (y) hay Hủy để đặt tên khác (n)? [y/N]: " ans
+            if [[ "$ans" == "\q" ]]; then echo ""; exit 0; fi
             if [[ "$ans" =~ ^[Yy]$ ]]; then
                 git fetch origin "$t"
                 git checkout -t "origin/$t"
@@ -187,6 +192,7 @@ show_task_menu() {
     echo -e "${CYAN}└──────────────────────────────┘${RESET}"
 
     read -r -p "Chọn chức năng hoặc task: " task_choice
+    if [[ "$task_choice" == "\q" ]]; then echo ""; exit 0; fi
     
     if [[ "$task_choice" == "L" || "$task_choice" == "l" ]]; then
         show_task_menu true
@@ -199,10 +205,12 @@ show_task_menu() {
         fi
         echo -e "${CYAN}-------------------------------${RESET}\n"
         read -r -p "Ấn Enter để quay lại menu..."
+        if [[ "$REPLY" == "\q" ]]; then echo ""; exit 0; fi
         show_task_menu "$show_all"
         return
     elif [[ "$task_choice" == "S" || "$task_choice" == "s" ]]; then
         read -r -p "📝 Nhập message commit: " commit_msg
+        if [[ "$commit_msg" == "\q" ]]; then echo ""; exit 0; fi
         if [ -n "$commit_msg" ]; then
             "$WORKSPACE/mb-tools/mb-save" "$commit_msg"
         else
@@ -242,6 +250,7 @@ show_task_menu() {
         handle_dirty_workspace || { sleep 2; show_task_menu "$show_all"; return; }
         
         read -r -p "Nhập tên task mới: " new_task
+        if [[ "$new_task" == "\q" ]]; then echo ""; exit 0; fi
         handle_task "$new_task"
         sleep 2
         show_task_menu "$show_all"
