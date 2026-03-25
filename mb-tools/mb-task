@@ -14,7 +14,7 @@ TASK=$(echo "$TASK" | sed -e 's/[^a-z0-9]/-/g' -e 's/-\{2,\}/-/g' -e 's/^-//' -e
 
 
 if ! git diff --quiet || ! git diff --cached --quiet; then
-  echo "⚠️ Bạn có thay đổi chưa commit. Hãy mb-save trước."
+  echo "⚠️ Bạn có thay đổi chưa commit. Hãy mb-save (phím S) trước."
   exit 1
 fi
 

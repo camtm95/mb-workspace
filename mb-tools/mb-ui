@@ -101,16 +101,16 @@ handle_dirty_workspace() {
     
     while true; do
         echo -e "\n⚠️  ${YELLOW}Bạn đang có mã nguồn vừa sửa nhưng chưa được lưu!${RESET}"
-        echo -e "│  [1] Hãy mang những thay đổi này sang task MỚI"
-        echo -e "│  [2] Lưu lại vào task HIỆN TẠI trước khi chuyển"
+        echo -e "│  [N] Hãy mang những thay đổi này sang task MỚI"
+        echo -e "│  [S] Lưu lại vào task HIỆN TẠI trước khi chuyển"
         echo -e "│  [C] Xem danh sách các file đang bị thay đổi"
         echo -e "│  [Q] Hủy, tôi không muốn chuyển task nữa"
-        read -r -p "👉 Lựa chọn của bạn [1/2/C/Q]: " dirty_choice
+        read -r -p "👉 Lựa chọn của bạn [N/S/C/Q]: " dirty_choice
         if [[ "$dirty_choice" == "\q" ]]; then echo ""; exit 0; fi
 
-        if [[ "$dirty_choice" == "1" ]]; then
+        if [[ "$dirty_choice" == "N" || "$dirty_choice" == "n" ]]; then
             return 0
-        elif [[ "$dirty_choice" == "2" ]]; then
+        elif [[ "$dirty_choice" == "S" || "$dirty_choice" == "s" ]]; then
             read -r -p "📝 Nhập message để lưu task hiện tại: " commit_msg
             if [[ "$commit_msg" == "\q" ]]; then echo ""; exit 0; fi
             if [ -n "$commit_msg" ]; then
@@ -181,7 +181,7 @@ show_task_menu() {
 
     echo -e "│  ${CYAN}--- Chức năng ---${RESET}"
     echo -e "│  [S] Lưu task đang làm"
-    echo -e "│  [D] Golive task"
+    echo -e "│  [D] Gửi task cho DEV dựng demo"
     echo -e "│  [C] Xem các file thay đổi"
     if [ "$show_all" = false ] && [ ${#branches[@]} -gt 3 ]; then
         echo -e "│  [L] Hiển thị toàn bộ task"
