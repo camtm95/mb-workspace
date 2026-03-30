@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -e
+
+REPO_URL=$1
+TOKEN=$2
+USERNAME=$3
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE="${MB_WORKSPACE_HOME:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+PROJECTS_DIR="$WORKSPACE/projects"
+
+mkdir -p "$PROJECTS_DIR"
+
+if [ -z "$REPO_URL" ]; then
+    echo "❌ Thiếu URL repository"
+    exit 1
+fi
+
+# Nếu có token và username, lồng vào URL
+if [ -n "$TOKEN" ] && [ -n "$USERNAME" ]; then
+    # Loại bỏ http:// hoặc https:// ở đầu URL gốc nếu có
+    CLEAN_URL=$(echo "$REPO_URL" | sed -e 's|^https://||' -e 's|^http://||')
+    FINAL_URL="https://$USERNAME:$TOKEN@$CLEAN_URL"
+else
+    FINAL_URL="$REPO_URL"
+fi
+
+NAME=$(basename "$REPO_URL" .git)
+TARGET_DIR="$PROJECTS_DIR/$NAME"
+
+if [ -d "$TARGET_DIR" ]; then
+    echo "⚠️ Dự án '$NAME' đã tồn tại. Đang cập nhật..."
+    git -C "$TARGET_DIR" pull
+else
+    echo "📦 Đang clone dự án: $NAME..."
+    git clone "$FINAL_URL" "$TARGET_DIR"
+fi
+
+echo "✅ Đã tải dự án thành công: $TARGET_DIR"

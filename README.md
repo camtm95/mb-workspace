@@ -2,6 +2,21 @@
 
 Bộ công cụ CLI cực kỳ thông thái giúp bạn quản lý dự án, xử lý vòng đời Git (clone, tạo task, chuyển nhánh, commit, submit) cực kỳ trơn tru. Hệ thống tự động cảnh báo xung đột, tránh mất mã nguồn, và đặc biệt dành cho những bạn không muốn gõ/nhớ lệnh Git dài dòng.
 
+> **🆕 CHẾ ĐỘ TRỢ LÝ AI (Khuyên dùng):** Bạn chỉ cần "chat" với AI ngay tại khung chat của IDE để hoàn thành mọi việc (Save, Task, Clone...) bằng tiếng Việt mà không cần đụng tới Terminal. Xem hướng dẫn tại đây: [GUIDE_AI.md](GUIDE_AI.md)
+
+---
+
+## 🛠 0. Điều kiện cần thiết
+
+Để sử dụng bộ công cụ này, máy tính của bạn cần cài đặt sẵn:
+
+1.  **Git**: (Bắt buộc)
+    -   Windows: `winget install --id Git.Git -e --source winget`
+    -   Mac: `brew install git`
+2.  **Node.js**: (Khuyên dùng để cài nhanh)
+    -   Windows: `winget install -e --id OpenJS.NodeJS`
+    -   Mac: `brew install node`
+
 ---
 
 ## 💻 1. Cài đặt và cập nhật (Bằng lệnh tự động)
