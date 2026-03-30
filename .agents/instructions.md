@@ -11,7 +11,10 @@ Trước khi thực hiện bất kỳ lệnh nào, hãy kiểm tra thư mục hi
 Tuyệt đối **KHÔNG** sử dụng các lệnh git thô như `git commit`, `git push`, `git checkout -b`.
 - Tại sao? Vì bộ công cụ `mb-tools` đã được lập trình các logic đặc biệt (tạo Merge Request GitLab tự động, chuẩn hóa tên task không dấu, kiểm tra an toàn dữ liệu).
 
-### ✅ QUY TẮC 2: LUÔN DÙNG MB-TOOLS (Khi ở trong MB Project)
+### ❌ QUY TẮC 2: KHÔNG CHẠY LẠI LỆNH CÀI ĐẶT (NPX)
+Tuyệt đối **KHÔNG** chạy lệnh `npx mb-workspace` hoặc `npx --yes mb-workspace` khi người dùng yêu cầu thao tác trong dự án (như mở task, lưu code, mở project). Lệnh npx chỉ dùng để CÀI ĐẶT ban đầu. Khi đã làm việc, hãy dùng trực tiếp các file trong `mb-tools/`.
+
+### ✅ QUY TẮC 3: LUÔN DÙNG MB-TOOLS (Khi ở trong MB Project)
 Hãy luôn sử dụng các công cụ trong thư mục `mb-tools/`:
 - Để lưu code: Dùng `mb-save "<lời nhắn>"`
 - Để quản lý task: Dùng `mb-task "<tên-task>"`
