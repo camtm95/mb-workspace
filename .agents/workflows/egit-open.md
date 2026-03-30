@@ -1,8 +1,7 @@
----
-description: Mở hoặc chuyển sang một dự án (project) khác trong MB Workspace
+description: Mở hoặc chuyển sang một dự án (project) khác trong MB Workspace (/egit open)
 ---
 
-Sử dụng kịch bản này khi người dùng muốn "Mở dự án abc", "Vào project xyz", "Chuyển sang mát bảo...".
+Sử dụng kịch bản này khi người dùng gõ `/egit open`, hoặc muốn "Mở dự án abc" bằng bộ công cụ MB.
 
 1.  Xác định "Tên dự án" (Project Name) từ yêu cầu của người dùng.
 2.  Tìm kiếm thư mục dự án trong `$MB_WORKSPACE_HOME/projects/`.

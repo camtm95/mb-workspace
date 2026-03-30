@@ -1,8 +1,7 @@
----
-description: Tải (Clone) dự án mới về máy, hỗ trợ Access Token nếu cần
+description: Tải (Clone) dự án mới về máy, hỗ trợ Access Token nếu cần (/egit clone-dự-án)
 ---
 
-Sử dụng kịch bản này khi người dùng muốn "Thêm dự án", "Clone cái này", "Tải code từ link...".
+Sử dụng kịch bản này khi người dùng gõ `/egit clone`, hoặc muốn "Thêm dự án", "Clone cái này" bằng bộ công cụ MB.
 
 1.  Xác định "Link Repository" (URL) từ yêu cầu của người dùng.
 2.  Nếu dự án yêu cầu quyền truy cập riêng tư, hãy hỏi "Username" và "Access Token" (ví dụ: "Dự án này cần token để tải, anh cho em xin Username và Token nhé?").

@@ -1,8 +1,7 @@
----
-description: Lưu lại toàn bộ mã nguồn đang sửa đổi của Task hiện tại (Save/Commit/Push)
+description: Lưu lại toàn bộ mã nguồn đang sửa đổi của Task hiện tại (Save/Commit/Push) (/egit save)
 ---
 
-Sử dụng kịch bản này khi người dùng muốn lưu code, cất code, save project, hoặc ghi nhận những gì vừa làm.
+Sử dụng kịch bản này khi người dùng gõ `/egit save`, hoặc muốn "Lưu code", "Cất code" bằng bộ công cụ MB.
 
 1.  Hỏi người dùng "Lời nhắn dự kiến" (Message) nếu họ chưa cung cấp (ví dụ: "Anh muốn ghi lời nhắn gì cho lần lưu này ạ?").
 2.  Xác định đường dẫn của MB Workspace: Lấy từ biến môi trường `MB_WORKSPACE_HOME` hoặc mặc định là `.mb-workspace` trong Home.

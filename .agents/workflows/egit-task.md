@@ -1,8 +1,7 @@
----
-description: Tạo task mới hoặc chuyển đổi sang task (nhánh) cũ (local hoặc origin)
+description: Tạo task mới hoặc chuyển đổi sang task (nhánh) cũ (local hoặc origin) (/egit task)
 ---
 
-Sử dụng kịch bản này khi người dùng muốn bắt đầu tính năng mới, quay lại làm task cũ, "chuyển qua nhánh...", hoặc làm tiếp công việc dở dang.
+Sử dụng kịch bản này khi người dùng gõ `/egit task`, hoặc muốn "Chuyển qua nhánh abc" bằng bộ công cụ MB.
 
 1.  Xác định "Tên task" từ yêu cầu của người dùng.
 2.  Kiểm tra xem người dùng có file nào đang sửa dở (`git status`) chưa được lưu không.

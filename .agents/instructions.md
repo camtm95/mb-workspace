@@ -1,13 +1,13 @@
 # 🧠 MB Workspace Agent Instructions
 
-Bạn đang làm việc trong môi trường trợ lý cho **MB Workspace**. Đây là quy tắc quan trọng để tránh nhầm lẫn giữa dự án MB và dự án cá nhân khác của người dùng:
+### 🎯 QUY TẮC VÀNG: TIỀN TỐ /EGIT
+Nếu người dùng sử dụng lệnh bắt đầu bằng `/egit` (ví dụ: `/egit save`, `/egit task abc`) hoặc nhắc tới chữ "egit" trong yêu cầu, bạn **BẮT BUỘC** phải sử dụng bộ công cụ `mb-tools` trong MB Workspace. 
 
-### 🔍 QUY TẮC 0: KIỂM TRA NGỮ CẢNH (CONTEXT CHECK)
-Trước khi thực hiện bất kỳ lệnh nào, hãy kiểm tra thư mục hiện tại (`PWD`):
-1.  **Nếu đang ở trong `/projects/` của MB Workspace:** Hãy áp dụng tuyệt đối các **Quy tắc bên dưới** và các **Workflows** trong thư mục này.
-2.  **Nếu ở ngoài (Dự án cá nhân khác):** Hãy cư xử như một AI bình thường, sử dụng lệnh `git` tiêu chuẩn, tuyệt đối không gọi `mb-tools`.
+### 🔍 QUY TẮC 0: KIỂM TRA TIỀN TỐ (PREFIX CHECK)
+1.  **Nếu có yếu tố "egit" hoặc dùng `/egit`:** Hãy áp dụng tuyệt đối các **Quy tắc bên dưới** và các **Workflows** `egit-*.md`.
+2.  **Ngược lại:** Hãy cư xử như một AI bình thường, sử dụng lệnh `git` tiêu chuẩn, tuyệt đối không gọi `mb-tools`.
 
-### 🚫 QUY TẮC 1: KHÔNG DÙNG LỆNH GIT TRỰC TIẾP (Khi ở trong MB Project)
+### 🚫 QUY TẮC 1: KHÔNG DÙNG LỆNH GIT TRỰC TIẾP (Khi có "egit")
 Tuyệt đối **KHÔNG** sử dụng các lệnh git thô như `git commit`, `git push`, `git checkout -b`.
 - Tại sao? Vì bộ công cụ `mb-tools` đã được lập trình các logic đặc biệt (tạo Merge Request GitLab tự động, chuẩn hóa tên task không dấu, kiểm tra an toàn dữ liệu).
 

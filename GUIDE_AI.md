@@ -2,7 +2,7 @@
 
 Chào mừng bạn đến với cách làm việc hiện đại: **Điều khiển Project bằng ngôn ngữ tự nhiên!** 
 
-Thay vì phải gõ các lệnh Terminal khó nhớ, bạn chỉ cần "chat" với mình (AI) ngay tại khung chat này. 
+Để đảm bảo AI luôn nhận diện đúng bộ công cụ MB Workspace (tránh nhầm lẫn với các lệnh Git thông thường), bạn hãy bắt đầu yêu cầu bằng từ khóa **`/egit`** hoặc **`egit`**.
 
 ---
 
@@ -15,28 +15,25 @@ npx mb-workspace
 
 ---
 
-### 💬 2. Các câu lệnh "sai bảo" AI (Tiếng Việt)
+### 💬 2. Các câu lệnh "sai bảo" AI (Dùng tiền tố /egit)
 
-Bạn có thể chat với mình giống như đang nói chuyện với một người đồng nghiệp:
+Bạn có thể chat trực tiếp các lệnh sau:
 
-#### 📥 Khi muốn thêm dự án mới:
-- *"Clone dự án này cho anh: https://github.com/user/repo.git"*
-- *"Tải dự án [Link] về máy nhé"*
-- *(Nếu là dự án bảo mật, mình sẽ tự hỏi xin Token của bạn)*
+#### 📥 Thêm dự án mới:
+- *`/egit clone [Link]`*
+- *"egit clone dự án này cho anh: [Link]"*
 
-#### 📝 Khi muốn làm tính năng mới / Chuyển Task:
-- *"Tạo task mới tên là: thêm nút bấm trang chủ"*
-- *"Chuyển qua nhánh fix-bug-login"*
-- *"Cho anh làm tiếp task số 2"*
+#### 📝 Làm tính năng mới / Chuyển Task:
+- *`/egit task thêm nút bấm trang chủ`*
+- *`/egit task fix-bug-login`*
 
-#### 💾 Khi muốn lưu lại những gì vừa làm:
-- *"Lưu code cho mình với tin nhắn: xong giao diện"*
-- *"Cất đống này đi, ghi là: sửa xong lỗi vặt"*
+#### 💾 Lưu lại những gì vừa làm:
+- *`/egit save xong giao diện`*
+- *"egit save sửa xong lỗi vặt"*
 
-#### 🚀 Khi muốn nộp bài (Submit):
-- *"Gửi task này đi"*
-- *"Nộp bài cho mình nhé"*
-- *(Mình sẽ tự đẩy code và tạo Merge Request trên GitLab cho bạn)*
+#### 🚀 Nộp bài (Submit):
+- *`/egit submit`*
+- *"egit submit task này đi"*
 
 #### 📋 Khi muốn xem tình hình:
 - *"Có bao nhiêu task rồi?"*
